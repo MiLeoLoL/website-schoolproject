@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinuxVault — Linux Consulting &amp; Infrastructuur</title>
+<meta name="description" content="LinuxVault zet veilige, schaalbare Linux-infrastructuur op voor KMO's en grote ondernemingen. Van advies tot beheer.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f14'/%3E%3Cpath d='M16 6l8 3v7c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V9l8-3z' fill='none' stroke='%234ade80' stroke-width='2'/%3E%3C/svg%3E">
+
+<style>
+  /* ============================================
+     LinuxVault — Huisstijl
+     Donker, clean, technisch (Linux-thema)
+     ============================================ */
+
+  :root {
+    --bg:          #0b0f14;
+    --bg-soft:     #0f151c;
+    --panel:       #131a22;
+    --panel-2:     #18212b;
+    --border:      #223040;
+    --text:        #e6edf3;
+    --muted:       #8b98a5;
+    --accent:      #4ade80;   /* terminal-groen */
+    --accent-dim:  #2f9e5c;
+    --accent-glow: rgba(74, 222, 128, 0.15);
+    --radius:      14px;
+    --maxw:        1120px;
+    --mono:        ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Subtiel raster op de achtergrond */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(74,222,128,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,222,128,0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 20%, transparent 75%);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+
+  /* ============ HEADER / NAV ============ */
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(11, 15, 20, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 72px;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--text);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .brand svg { flex-shrink: 0; }
+
+  .brand span b { color: var(--accent); font-weight: 700; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 13px;
+    border-radius: 8px;
+    transition: color .18s, background .18s;
+  }
+
+  .nav-links a:hover { color: var(--text); background: var(--panel); }
+
+  .nav-links a.cta {
+    color: var(--bg);
+    background: var(--accent);
+    font-weight: 600;
+  }
+
+  .nav-links a.cta:hover { background: #6ee79a; color: var(--bg); }
+
+  /* ============ HERO ============ */
+
+  .hero {
+    padding: clamp(64px, 10vw, 120px) 0 clamp(56px, 8vw, 96px);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid rgba(74,222,128,0.28);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+
+  .tag::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(74,222,128,0.18);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: .5; transform: scale(.82); }
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 5.2vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    font-weight: 800;
+    margin-bottom: 22px;
+  }
+
+  h1 .hl { color: var(--accent); }
+
+  .lead {
+    font-size: clamp(1rem, 1.6vw, 1.14rem);
+    color: var(--muted);
+    max-width: 54ch;
+    margin-bottom: 32px;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 26px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform .18s, background .18s, border-color .18s, box-shadow .18s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #07120a;
+    box-shadow: 0 0 0 0 rgba(74,222,128,0.4);
+  }
+
+  .btn-primary:hover {
+    background: #6ee79a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px -8px rgba(74,222,128,0.6);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent-dim);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* --- Terminal mockup --- */
+
+  .terminal {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow:
+      0 30px 60px -30px rgba(0,0,0,0.9),
+      0 0 60px -30px rgba(74,222,128,0.25);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.28);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+
+  .term-title {
+    margin-left: 8px;
+    color: var(--muted);
+    font-size: 0.74rem;
+    letter-spacing: 0.03em;
+  }
+
+  .term-body {
+    padding: 20px 18px 24px;
+    line-height: 2;
+    overflow-x: auto;
+  }
+
+  .term-body .p { color: var(--accent); }
+  .term-body .c { color: var(--text); }
+  .term-body .o { color: var(--muted); }
+  .term-body .ok { color: var(--accent); font-weight: 600; }
+
+  .caret {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: var(--accent);
+    vertical-align: -2px;
+    animation: blink 1.1s step-end infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ============ SECTIES ============ */
+
+  section { padding: clamp(56px, 8vw, 96px) 0; position: relative; z-index: 1; }
+
+  .sec-head { max-width: 680px; margin-bottom: 52px; }
+
+  .sec-kicker {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    font-weight: 750;
+    margin-bottom: 16px;
+  }
+
+  .sec-head p { color: var(--muted); font-size: 1.02rem; }
+
+  /* --- Over ons --- */
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 56px);
+    align-items: start;
+  }
+
+  .about-text p { color: var(--muted); margin-bottom: 16px; }
+  .about-text p strong { color: var(--text); font-weight: 600; }
+
+  .quote {
+    margin-top: 26px;
+    padding: 18px 22px;
+    border-left: 3px solid var(--accent);
+    background: var(--panel);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .fact {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    transition: border-color .2s, transform .2s;
+  }
+
+  .fact:hover { border-color: var(--accent-dim); transform: translateY(-3px); }
+
+  .fact .num {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .fact .lbl {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* --- Diensten --- */
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px 26px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .22s, transform .22s, box-shadow .22s;
+  }
+
+  .card::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity .25s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-dim);
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px -28px rgba(0,0,0,0.9);
+  }
+
+  .card:hover::after { opacity: 1; }
+
+  .icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 11px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(74,222,128,0.24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .icon-box svg { width: 22px; height: 22px; stroke: var(--accent); }
+
+  .card h3 {
+    font-size: 1.1rem;
+    font-weight: 650;
+    margin-bottom: 10px;
+    letter-spacing: -0.015em;
+  }
+
+  .card p { color: var(--muted); font-size: 0.93rem; }
+
+  /* --- Aanpak (stappen) --- */
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+    counter-reset: step;
+  }
+
+  .step {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 24px;
+    position: relative;
+    transition: border-color .2s, transform .2s;
+  }
+
+  .step:hover { border-color: var(--accent-dim); transform: translateY(-3px); }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .step h4 { font-size: 1.02rem; font-weight: 650; margin-bottom: 8px; }
+  .step p { color: var(--muted); font-size: 0.9rem; }
+
+  /* --- Waarom --- */
+
+  .why {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+  }
+
+  .why-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .check {
+    flex-shrink: 0;
+    width: 21px; height: 21px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    border: 1px solid rgba(74,222,128,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+  }
+
+  .check svg { width: 12px; height: 12px; stroke: var(--accent); stroke-width: 3; }
+
+  .why-item h4 { font-size: 0.96rem; font-weight: 620; margin-bottom: 3px; }
+  .why-item p { font-size: 0.87rem; color: var(--muted); }
+
+  /* ============ CONTACT ============ */
+
+  #contact { padding-bottom: clamp(64px, 9vw, 110px); }
+
+  .contact-box {
+    background:
+      radial-gradient(ellipse 70% 130% at 50% 0%, rgba(74,222,128,0.10), transparent 70%),
+      linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: clamp(36px, 6vw, 68px) clamp(24px, 5vw, 60px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-box::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .contact-box h2 { margin-bottom: 14px; }
+
+  .contact-box > p {
+    color: var(--muted);
+    max-width: 58ch;
+    margin: 0 auto 34px;
+  }
+
+  .mail-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: clamp(0.85rem, 2.1vw, 1.05rem);
+    font-weight: 600;
+    color: #07120a;
+    background: var(--accent);
+    padding: 17px 34px;
+    border-radius: 12px;
+    word-break: break-all;
+    transition: transform .18s, box-shadow .18s, background .18s;
+    box-shadow: 0 12px 34px -14px rgba(74,222,128,0.6);
+  }
+
+  .mail-btn:hover {
+    background: #6ee79a;
+    transform: translateY(-3px);
+    box-shadow: 0 18px 42px -14px rgba(74,222,128,0.75);
+  }
+
+  .mail-btn svg { width: 19px; height: 19px; flex-shrink: 0; }
+
+  .contact-note {
+    margin-top: 22px;
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+
+  .contact-note code {
+    font-family: var(--mono);
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 0.84rem;
+  }
+
+  /* ============ FOOTER ============ */
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 34px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .foot .brand { font-size: 1rem; }
+
+  .foot a { color: var(--muted); transition: color .18s; }
+  .foot a:hover { color: var(--accent); }
+
+  .disclaimer {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: #5d6b78;
+    text-align: center;
+  }
+
+  /* ============ RESPONSIVE ============ */
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; }
+    .terminal { order: 2; }
+  }
+
+  @media (max-width: 620px) {
+    .nav { min-height: auto; padding: 14px 0; }
+    .nav-links { width: 100%; justify-content: flex-start; gap: 4px; }
+    .nav-links a { padding: 6px 10px; font-size: 0.83rem; }
+    .facts { grid-template-columns: 1fr; }
+    .btn { width: 100%; justify-content: center; }
+    .mail-btn { padding: 15px 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="#top" class="brand">
+        <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#131a22" stroke="#223040"/>
+          <path d="M16 6l8 3v7c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V9l8-3z"
+                fill="none" stroke="#4ade80" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M13.5 15.5l2 2 4-4.2" fill="none" stroke="#4ade80"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Linux<b>Vault</b></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#over">Over ons</a></li>
+        <li><a href="#diensten">Diensten</a></li>
+        <li><a href="#aanpak">Aanpak</a></li>
+        <li><a href="#waarom">Waarom</a></li>
+        <li><a href="#contact" class="cta">Neem contact op</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+
+        <div>
+          <span class="tag">Linux Consulting &amp; Infrastructuur</span>
+
+          <h1>Uw infrastructuur,<br><span class="hl">stevig verankerd.</span></h1>
+
+          <p class="lead">
+            LinuxVault ontwerpt, bouwt en beheert Linux-infrastructuur voor KMO's
+            en grote ondernemingen. Van het eerste advies tot de dagelijkse opvolging:
+            wij zorgen dat uw servers veilig, schaalbaar en betrouwbaar draaien.
+          </p>
+
+          <div class="btn-row">
+            <a href="#contact" class="btn btn-primary">
+              Neem contact op
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <a href="#diensten" class="btn btn-ghost">Bekijk onze diensten</a>
+          </div>
+        </div>
+
+        <!-- Terminal mockup -->
+        <div class="terminal" aria-hidden="true">
+          <div class="term-bar">
+            <span class="dot r"></span>
+            <span class="dot y"></span>
+            <span class="dot g"></span>
+            <span class="term-title">root@linuxvault:~</span>
+          </div>
+          <div class="term-body">
+            <div><span class="p">$</span> <span class="c">linuxvault deploy --client "uw-bedrijf"</span></div>
+            <div><span class="o">→ Analyse van de bestaande omgeving...</span> <span class="ok">OK</span></div>
+            <div><span class="o">→ Ontwerp van de infrastructuur...</span> <span class="ok">OK</span></div>
+            <div><span class="o">→ Installatie &amp; configuratie servers...</span> <span class="ok">OK</span></div>
+            <div><span class="o">→ Security hardening &amp; monitoring...</span> <span class="ok">OK</span></div>
+            <div><span class="o">→ Back-up &amp; failover ingericht...</span> <span class="ok">OK</span></div>
+            <div style="margin-top:6px">
+              <span class="ok">✔ Infrastructuur online en beveiligd.</span>
+            </div>
+            <div><span class="p">$</span> <span class="caret"></span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OVER ONS ============ -->
+  <section id="over">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-kicker">// Over LinuxVault</span>
+        <h2>Specialisten in open-source infrastructuur</h2>
+        <p>
+          Wij geloven dat sterke IT begint bij een stabiele, goed doordachte basis.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            <strong>LinuxVault</strong> is een consultancybedrijf dat zich volledig
+            richt op Linux en open-source technologie. Wij helpen organisaties — van
+            KMO's tot grote ondernemingen — om hun IT-infrastructuur op een
+            professionele, veilige en schaalbare manier op te zetten.
+          </p>
+          <p>
+            Geen standaardoplossingen van de plank, maar een aanpak op maat.
+            We analyseren uw huidige omgeving, ontwerpen een architectuur die past
+            bij uw groeiplannen en begeleiden de volledige implementatie. Daarna
+            blijven we beschikbaar voor beheer, monitoring en optimalisatie.
+          </p>
+          <p>
+            Onze kracht zit in <strong>kennis, duidelijkheid en betrouwbaarheid</strong>:
+            u weet precies wat er gebeurt in uw infrastructuur, en wij zorgen dat
+            het blijft draaien.
+          </p>
+
+          <div class="quote">
+            “Uw data, veilig opgeborgen. Uw systemen, altijd online.”
+          </div>
+        </div>
+
+        <div class="facts">
+          <div class="fact">
+            <div class="num">100%</div>
+            <div class="lbl">Open-source technologie, geen vendor lock-in</div>
+          </div>
+          <div class="fact">
+            <div class="num">24/7</div>
+            <div class="lbl">Monitoring en opvolging van kritieke systemen</div>
+          </div>
+          <div class="fact">
+            <div class="num">KMO →<br>Enterprise</div>
+            <div class="lbl">Oplossingen die meegroeien met uw organisatie</div>
+          </div>
+          <div class="fact">
+            <div class="num">Op maat</div>
+            <div class="lbl">Advies en implementatie afgestemd op uw noden</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DIENSTEN ============ -->
+  <section id="diensten">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-kicker">// Diensten</span>
+        <h2>Wat wij voor u doen</h2>
+        <p>
+          Van strategisch advies tot volledig uitgerolde en beheerde Linux-infrastructuur.
+        </p>
+      </div>
+
+      <div class="cards">
+
+        <article class="card">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18M3 12h18"/>
+              <circle cx="12" cy="12" r="9"/>
+            </svg>
+          </div>
+          <h3>Linux Consulting</h3>
+          <p>
+            Advies over Linux-architectuur, tooling en最佳 practices. We denken mee
+            over uw IT-strategie en vertalen die naar een concreet, haalbaar plan.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="6" rx="2"/>
+              <rect x="3" y="14" width="18" height="6" rx="2"/>
+              <path d="M7 7h.01M7 17h.01"/>
+            </svg>
+          </div>
+          <h3>Infrastructuur opzetten</h3>
+          <p>
+            Ontwerp en installatie van fysieke en virtuele servers, virtualisatie,
+            containers en clustering — volledig afgestemd op uw omgeving.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7h11a4 4 0 010 8H9"/>
+              <path d="M7 12l-3 3 3 3"/>
+              <path d="M20 5l-3 3 3 3"/>
+            </svg>
+          </div>
+          <h3>Migratie naar Linux</h3>
+          <p>
+            Overstap van verouderde of gesloten systemen naar een moderne
+            Linux-omgeving, met minimale onderbreking van uw werking.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l8 3v6c0 5-3.4 8.4-8 9-4.6-.6-8-4-8-9V6l8-3z"/>
+              <path d="M9.5 12l1.8 1.8 3.4-3.6"/>
+            </svg>
+          </div>
+          <h3>Security &amp; Hardening</h3>
+          <p>
+            Beveiligingsaudits, hardening van servers, firewall- en toegangsbeleid,
+            patchbeheer en het opvolgen van kwetsbaarheden.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20V10M18 20V4M6 20v-4"/>
+            </svg>
+          </div>
+          <h3>Monitoring &amp; Beheer</h3>
+          <p>
+            Continue opvolging van uw systemen, performantie-analyse, back-ups
+            en een duidelijk aanspreekpunt bij incidenten.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6h16M4 12h10M4 18h7"/>
+              <circle cx="18" cy="17" r="3"/>
+            </svg>
+          </div>
+          <h3>Automatisatie &amp; IaC</h3>
+          <p>
+            Reproduceerbare omgevingen met Infrastructure as Code, automatische
+            deployments en scripting voor terugkerende beheertaken.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AANPAK ============ -->
+  <section id="aanpak">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-kicker">// Onze aanpak</span>
+        <h2>Van analyse tot beheer, in vier stappen</h2>
+        <p>Een duidelijk traject, zodat u altijd weet waar we staan.</p>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <span class="step-num">STAP 01</span>
+          <h4>Analyse</h4>
+          <p>
+            We brengen uw huidige infrastructuur, knelpunten en groeidoelen
+            in kaart tijdens een verkennend gesprek.
+          </p>
+        </div>
+
+        <div class="step">
+          <span class="step-num">STAP 02</span>
+          <h4>Ontwerp</h4>
+          <p>
+            Op basis daarvan stellen we een architectuur en implementatieplan
+            op — helder, onderbouwd en met een duidelijke scope.
+          </p>
+        </div>
+
+        <div class="step">
+          <span class="step-num">STAP 03</span>
+          <h4>Implementatie</h4>
+          <p>
+            We bouwen de omgeving op, configureren servers, beveiligen het
+            geheel en testen alles grondig voor de oplevering.
+          </p>
+        </div>
+
+        <div class="step">
+          <span class="step-num">STAP 04</span>
+          <h4>Beheer &amp; groei</h4>
+          <p>
+            Na de oplevering blijven we monitoren, optimaliseren en ondersteunen,
+            zodat uw infrastructuur mee blijft groeien.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WAAROM ============ -->
+  <section id="waarom">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-kicker">// Waarom LinuxVault</span>
+        <h2>Waarom bedrijven voor ons kiezen</h2>
+      </div>
+
+      <div class="why">
+
+        <div class="why-item">
+          <span class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5l4.5 4.5L19 7"/>
+            </svg>
+          </span>
+          <div>
+            <h4>Volledig open source</h4>
+            <p>Geen dure licenties en geen vendor lock-in. U houdt de controle over uw eigen systemen.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <span class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5l4.5 4.5L19 7"/>
+            </svg>
+          </span>
+          <div>
+            <h4>Schaalbaar ontwerp</h4>
+            <p>Onze oplossingen groeien mee van een kleine KMO-opstelling tot een enterprise-omgeving.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <span class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5l4.5 4.5L19 7"/>
+            </svg>
+          </span>
+          <div>
+            <h4>Security by design</h4>
+            <p>Beveiliging is geen extraatje, maar zit van bij het begin in het ontwerp verweven.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <span class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5l4.5 4.5L19 7"/>
+            </svg>
+          </span>
+          <div>
+            <h4>Duidelijke communicatie</h4>
+            <p>Geen onnodig jargon. U krijgt heldere rapporten en één vast aanspreekpunt.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <span class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5l4.5 4.5L19 7"/>
+            </svg>
+          </span>
+          <div>
+            <h4>Automatisatie</h4>
+            <p>Reproduceerbare omgevingen en scripting zorgen voor minder fouten en snellere uitrol.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <span class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5l4.5 4.5L19 7"/>
+            </svg>
+          </span>
+          <div>
+            <h4>Betrouwbare opvolging</h4>
+            <p>Monitoring en proactief onderhoud voorkomen problemen nog voor ze optreden.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-box">
+        <span class="sec-kicker">// Contact</span>
+        <h2>Klaar om uw infrastructuur te versterken?</h2>
+        <p>
+          Vertel ons kort over uw organisatie en uitdaging. We bekijken graag
+          vrijblijvend hoe LinuxVault u kan helpen met uw Linux-infrastructuur —
+          van een eerste advies tot een volledig beheerde omgeving.
+        </p>
+
+        <a class="mail-btn" href="mailto:stig.deflem@student.hogent.be?subject=Aanvraag%20LinuxVault%20—%20consulting">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/>
+            <path d="M3 7l9 6 9-6"/>
+          </svg>
+          stig.deflem@student.hogent.be
+        </a>
+
+        <p class="contact-note">
+          Stuur een e-mail met onderwerp <code>Aanvraag LinuxVault — consulting</code>
+          en we nemen zo snel mogelijk contact met u op.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a href="#top" class="brand">
+        <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="7" fill="#131a22" stroke="#223040"/>
+          <path d="M16 6l8 3v7c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V9l8-3z"
+                fill="none" stroke="#4ade80" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <span>Linux<b>Vault</b></span>
+      </a>
+
+      <div>
+        <a href="mailto:stig.deflem@student.hogent.be">stig.deflem@student.hogent.be</a>
+      </div>
+
+      <div>© 2025 LinuxVault</div>
+    </div>
+
+    <p class="disclaimer">
+      LinuxVault is een fictief bedrijf, gecreëerd in het kader van een schoolopdracht
+      web content creation.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
