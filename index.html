@@ -4,8 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinuxVault — Linux Consulting &amp; Infrastructuur</title>
+<meta name="theme-color" content="#0b0f14">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LinuxVault — Linux Consulting &amp; Infrastructuur">
+<meta property="og:description" content="Veilige, schaalbare Linux-infrastructuur voor KMO's en grote ondernemingen.">
 <meta name="description" content="LinuxVault zet veilige, schaalbare Linux-infrastructuur op voor KMO's en grote ondernemingen. Van advies tot beheer.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f14'/%3E%3Cpath d='M16 6l8 3v7c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V9l8-3z' fill='none' stroke='%234ade80' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f14'/%3E%3Cpath d='M16 6l8 3v7c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V9l8-3z' fill='none' stroke='%234ade80' stroke-width='2'/%3E%3Cpath d='M13.5 15.5l2 2 4-4.2' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 
 <style>
   /* ============================================
@@ -68,6 +72,25 @@
   }
 
   a { color: var(--accent); text-decoration: none; }
+
+  a:focus-visible, .btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 16px; top: -60px;
+    background: var(--accent);
+    color: #07120a;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 100;
+    transition: top .18s;
+  }
+  .skip-link:focus { top: 12px; }
 
   /* ============ HEADER / NAV ============ */
 
@@ -629,10 +652,12 @@
 
 <body>
 
+<a class="skip-link" href="#top">Naar de inhoud</a>
+
 <!-- ============ HEADER ============ -->
 <header>
   <div class="wrap">
-    <nav class="nav">
+    <nav class="nav" aria-label="Hoofdmenu">
       <a href="#top" class="brand">
         <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
           <rect width="32" height="32" rx="7" fill="#131a22" stroke="#223040"/>
@@ -793,7 +818,7 @@
           </div>
           <h3>Linux Consulting</h3>
           <p>
-            Advies over Linux-architectuur, tooling en最佳 practices. We denken mee
+            Advies over Linux-architectuur, tooling en best practices. We denken mee
             over uw IT-strategie en vertalen die naar een concreet, haalbaar plan.
           </p>
         </article>
@@ -1027,7 +1052,7 @@
           van een eerste advies tot een volledig beheerde omgeving.
         </p>
 
-        <a class="mail-btn" href="mailto:stig.deflem@student.hogent.be?subject=Aanvraag%20LinuxVault%20—%20consulting">
+        <a class="mail-btn" href="mailto:stig.deflem@student.hogent.be?subject=Aanvraag%20LinuxVault%20%E2%80%94%20consulting">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/>
@@ -1063,7 +1088,7 @@
         <a href="mailto:stig.deflem@student.hogent.be">stig.deflem@student.hogent.be</a>
       </div>
 
-      <div>© 2025 LinuxVault</div>
+      <div>© <span id="year">2026</span> LinuxVault</div>
     </div>
 
     <p class="disclaimer">
@@ -1072,6 +1097,10 @@
     </p>
   </div>
 </footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 </body>
 </html>
