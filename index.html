@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Website gemaakt door Stig Deflem — schoolopdracht web content creation (HOGENT). LinuxVault is een fictief bedrijf. -->
 <title>LinuxVault — Linux Consulting &amp; Infrastructuur</title>
+<meta name="author" content="Stig Deflem">
 <meta name="theme-color" content="#0b0f14">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LinuxVault — Linux Consulting &amp; Infrastructuur">
@@ -91,6 +93,49 @@
     transition: top .18s;
   }
   .skip-link:focus { top: 12px; }
+
+  /* ============ SCHOOLPROJECT-BALK + NOTICE ============ */
+
+  .school-bar {
+    position: relative;
+    z-index: 60;
+    background: var(--accent);
+    color: #07120a;
+    text-align: center;
+    font-size: 0.86rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    line-height: 1.4;
+  }
+
+  .school-bar strong { font-weight: 800; }
+
+  .school-note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    max-width: 54ch;
+    margin-bottom: 28px;
+    padding: 14px 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .school-note strong { color: var(--text); }
+
+  .author-credit {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .author-credit strong { color: var(--accent); font-weight: 700; }
 
   /* ============ HEADER / NAV ============ */
 
@@ -654,6 +699,10 @@
 
 <a class="skip-link" href="#top">Naar de inhoud</a>
 
+<div class="school-bar">
+  🎓 Schoolproject — website gemaakt door <strong>Stig Deflem</strong> · LinuxVault is een fictief bedrijf
+</div>
+
 <!-- ============ HEADER ============ -->
 <header>
   <div class="wrap">
@@ -696,6 +745,14 @@
             LinuxVault ontwerpt, bouwt en beheert Linux-infrastructuur voor KMO's
             en grote ondernemingen. Van het eerste advies tot de dagelijkse opvolging:
             wij zorgen dat uw servers veilig, schaalbaar en betrouwbaar draaien.
+          </p>
+
+          <p class="school-note">
+            <span aria-hidden="true">ℹ️</span>
+            <span>
+              <strong>Let op:</strong> dit is een schoolproject van <strong>Stig Deflem</strong>
+              (web content creation). LinuxVault en alles op deze website is <strong>fictief</strong>.
+            </span>
           </p>
 
           <div class="btn-row">
@@ -1088,12 +1145,16 @@
         <a href="mailto:stig.deflem@student.hogent.be">stig.deflem@student.hogent.be</a>
       </div>
 
-      <div>© <span id="year">2026</span> LinuxVault</div>
+      <div>© <span id="year">2026</span> LinuxVault · door Stig Deflem</div>
     </div>
 
+    <p class="author-credit">
+      Ontwerp &amp; ontwikkeling: <strong>Stig Deflem</strong>
+    </p>
+
     <p class="disclaimer">
-      LinuxVault is een fictief bedrijf, gecreëerd in het kader van een schoolopdracht
-      web content creation.
+      LinuxVault is een fictief bedrijf, gecreëerd door Stig Deflem in het kader van een
+      schoolopdracht web content creation.
     </p>
   </div>
 </footer>
